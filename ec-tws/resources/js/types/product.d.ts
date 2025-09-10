@@ -1,3 +1,4 @@
+import { Media } from ".";
 import { Category } from "./category";
 
 
@@ -15,6 +16,7 @@ export type Product = {
   category: Category;
   price: string;
   stock: string;
+  media: Media[];
   created_at: string;
   updated_at: string;
 };

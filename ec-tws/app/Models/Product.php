@@ -37,6 +37,8 @@ class Product extends Model implements HasMedia
         'updated_at',
     ];
 
+    public $appends = ['thumbnail'];
+
     /**
      * Register media conversions.
      */
@@ -49,5 +51,12 @@ class Product extends Model implements HasMedia
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+
+    public function getthumbnailAttribute()
+    {
+        $firstMedia = $this->getFirstMediaUrl();
+        return $firstMediaUrl === "" ? null : $firstMediaUrl;
     }
 }

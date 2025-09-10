@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Database, Grid2X2, KeySquare, LayoutGrid, Store, Users } from 'lucide-react';
+import { BookOpen, Database, Grid2X2, KeySquare, LayoutGrid, Package, ShoppingCart, Store, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -26,12 +26,17 @@ const mainNavItems: NavItem[] = [
   {
     title: 'Couriers',
     href: route('courier.index'),
-    icon: Database,
+    icon: Package,
   },
   {
     title: 'Products',
     href: route('product.index'),
     icon: Store,
+  },
+  {
+    title: 'Carts',
+    href: route('cart.index'),
+    icon: ShoppingCart,
   },
 ];
 

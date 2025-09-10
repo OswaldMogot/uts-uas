@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Requests\BulkUpdateProductRequest;
 use App\Http\Requests\BulkDeleteProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,6 +31,7 @@ class ProductController extends Controller
         return Inertia::render('product/index', [
             'products' => $data->get(),
             'query' => $request->input(),
+            'categories' => Category::get(),
             'permissions' => [
                 'canAdd' => $this->user->can("create product"),
                 'canShow' => $this->user->can("show product"),

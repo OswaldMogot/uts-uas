@@ -3,6 +3,9 @@ import { SharedData, type BreadcrumbItem } from '@/types';
 import { usePage } from '@inertiajs/react';
 import DateTimeWidget from './widget/date-time-widget';
 import UserInfoWidget from './widget/user-info-widget';
+import { FC } from 'react';
+import { Product } from '@/types/product';
+import ProductItemCard from '../product/components/product-item-card';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -11,7 +14,11 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default function Dashboard() {
+type props = {
+  products: Product[];
+};
+
+const Dashboard: FC<props> =({products}) => {
   const {
     auth: { roles },
   } = usePage<SharedData>().props;
@@ -21,6 +28,13 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 gap-6">
         <UserInfoWidget />
         <DateTimeWidget />
+      </div>
+
+      <div className="grid">
+        {products.map(p) => (
+          <ProductItemCard key={p.id} product={p} />
+        
+        ))}
       </div>
     </AppLayout>
   );

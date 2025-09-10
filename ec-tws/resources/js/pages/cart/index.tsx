@@ -6,25 +6,23 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { SharedData } from '@/types';
-import { Product } from '@/types/product';
+import { Cart } from '@/types/cart';
 import { Link, usePage } from '@inertiajs/react';
 import { Edit, Filter, Folder, FolderArchive, Image, Plus, Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
-import ProductDeleteDialog from './components/product-delete-dialog';
-import ProductFilterSheet from './components/product-filter-sheet';
-import ProductFormSheet from './components/product-form-sheet';
-import ProductBulkEditSheet from './components/product-bulk-edit-sheet';
-import ProductBulkDeleteDialog from './components/product-bulk-delete-dialog';
-import ProductUploadMediaSheet from './components/product-upload-sheet';
-import { formatRupiah } from '@/lib/utils';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import CartDeleteDialog from './components/cart-delete-dialog';
+import CartFilterSheet from './components/cart-filter-sheet';
+import CartFormSheet from './components/cart-form-sheet';
+import CartBulkEditSheet from './components/cart-bulk-edit-sheet';
+import CartBulkDeleteDialog from './components/cart-bulk-delete-dialog';
+import CartUploadMediaSheet from './components/cart-upload-sheet';
 
 type Props = {
-  products: Product[];
+  carts: Cart[];
   query: { [key: string]: string };
 };
 
-const ProductList: FC<Props> = ({ products, query }) => {
+const CartList: FC<Props> = ({ carts, query }) => {
   const [ids, setIds] = useState<number[]>([]);
   const [cari, setCari] = useState('');
 
@@ -32,29 +30,25 @@ const ProductList: FC<Props> = ({ products, query }) => {
 
   return (
     <AppLayout
-      title="Products"
-      description="Manage your products"
+      title="Carts"
+      description="Manage your carts"
       actions={
         <>
           {permissions?.canAdd && (
-            <ProductFormSheet purpose="create">
+            <CartFormSheet purpose="create">
               <Button>
                 <Plus />
-                Create new product
+                Create new cart
               </Button>
-            </ProductFormSheet>
+            </CartFormSheet>
           )}
-          <Button variant={'destructive'} size={'icon'} asChild>
-    <Link href={route('product.archived')}>
-        <FolderArchive />
-    </Link>
-</Button>
+          
         </>
       }
     >
       <div className="flex gap-2">
-        <Input placeholder="Search products..." value={cari} onChange={(e) => setCari(e.target.value)} />
-        <ProductFilterSheet query={query}>
+        <Input placeholder="Search carts..." value={cari} onChange={(e) => setCari(e.target.value)} />
+        <CartFilterSheet query={query}>
           <Button>
             <Filter />
             Filter data
@@ -62,22 +56,22 @@ const ProductList: FC<Props> = ({ products, query }) => {
               <Badge variant="secondary">{Object.values(query).filter((val) => val && val !== '').length}</Badge>
             )}
           </Button>
-        </ProductFilterSheet>
+        </CartFilterSheet>
         {ids.length > 0 && (
           <>
             <Button variant={'ghost'} disabled>
               {ids.length} item selected
             </Button>
-            <ProductBulkEditSheet productIds={ids}>
+            <CartBulkEditSheet cartIds={ids}>
               <Button>
                 <Edit /> Edit selected
               </Button>
-            </ProductBulkEditSheet>
-            <ProductBulkDeleteDialog productIds={ids}>
+            </CartBulkEditSheet>
+            <CartBulkDeleteDialog cartIds={ids}>
               <Button variant={'destructive'}>
                 <Trash2 /> Delete selected
               </Button>
-            </ProductBulkDeleteDialog>
+            </CartBulkDeleteDialog>
           </>
         )}
       </div>
@@ -88,10 +82,10 @@ const ProductList: FC<Props> = ({ products, query }) => {
               <Button variant={'ghost'} size={'icon'} asChild>
                 <Label>
                   <Checkbox
-                    checked={ids.length === products.length}
+                    checked={ids.length === carts.length}
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setIds(products.map((product) => product.id));
+                        setIds(carts.map((cart) => cart.id));
                       } else {
                         setIds([]);
                       }
@@ -101,66 +95,55 @@ const ProductList: FC<Props> = ({ products, query }) => {
               </Button>
             </TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Stock</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products
-            .filter((product) => JSON.stringify(product).toLowerCase().includes(cari.toLowerCase()))
-            .map((product) => (
-              <TableRow key={product.id}>
+          {carts
+            .filter((cart) => JSON.stringify(cart).toLowerCase().includes(cari.toLowerCase()))
+            .map((cart) => (
+              <TableRow key={cart.id}>
                 <TableCell>
                   <Button variant={'ghost'} size={'icon'} asChild>
                     <Label>
                       <Checkbox
-                        checked={ids.includes(product.id)}
+                        checked={ids.includes(cart.id)}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setIds([...ids, product.id]);
+                            setIds([...ids, cart.id]);
                           } else {
-                            setIds(ids.filter((id) => id !== product.id));
+                            setIds(ids.filter((id) => id !== cart.id));
                           }
                         }}
                       />
                     </Label>
                   </Button>
                 </TableCell>
-                    <Avatar>
-                      <AvatarImage src={product.thumbnail} alt={product.name} />
-                    </Avatar>
-                <TableCell>{ product.name }</TableCell>
-                <TableCell>{formatRupiah(product.price)}</TableCell>
-                <TableCell>{ product.stock }</TableCell>
+                <TableCell>{ cart.name }</TableCell>
                 <TableCell>
                   {permissions?.canShow && (
                     <Button variant={'ghost'} size={'icon'}>
-                      <Link href={route('product.show', product.id)}>
+                      <Link href={route('cart.show', cart.id)}>
                         <Folder />
                       </Link>
                     </Button>
                   )}
                   {permissions?.canUpdate && (
                     <>
-                      <ProductUploadMediaSheet product={product}>
-    <Button variant={'ghost'} size={'icon'}>
-        <Image />
-    </Button>
-</ProductUploadMediaSheet>
-                      <ProductFormSheet purpose="edit" product={product}>
+                      
+                      <CartFormSheet purpose="edit" cart={cart}>
                         <Button variant={'ghost'} size={'icon'}>
                           <Edit />
                         </Button>
-                      </ProductFormSheet>
+                      </CartFormSheet>
                     </>
                   )}
                   {permissions?.canDelete && (
-                    <ProductDeleteDialog product={product}>
+                    <CartDeleteDialog cart={cart}>
                       <Button variant={'ghost'} size={'icon'}>
                         <Trash2 />
                       </Button>
-                    </ProductDeleteDialog>
+                    </CartDeleteDialog>
                   )}
                 </TableCell>
               </TableRow>
@@ -171,4 +154,4 @@ const ProductList: FC<Props> = ({ products, query }) => {
   );
 };
 
-export default ProductList;
+export default CartList;
