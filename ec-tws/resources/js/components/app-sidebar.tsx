@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
     href: route('category.index'),
     icon: Grid2X2,
   },
+  {
+    title: 'Couriers',
+    href: route('courier.index'),
+    icon: Database,
+  }
 ];
 
 const footerNavItems: NavItem[] = [];
