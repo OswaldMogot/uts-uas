@@ -21,7 +21,11 @@ const CartFormSheet: FC<Props> = ({ children, cart, purpose }) => {
   const [open, setOpen] = useState(false);
 
   const { data, setData, put, post, reset, processing } = useForm({
-    name: cart?.name ?? '',
+    product_id: cart?.product_id || '',
+    name: cart?.name || '',
+    quantity: cart?.quantity || 1,
+    price: cart?.price || 0,
+    total: cart?.total || 0,
   });
 
   const handleSubmit = () => {

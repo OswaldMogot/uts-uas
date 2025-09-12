@@ -56,7 +56,7 @@ class Product extends Model implements HasMedia
 
     public function getthumbnailAttribute()
     {
-        $firstMedia = $this->getFirstMediaUrl();
+        $firstMediaUrl = $this->getFirstMediaUrl();
         return $firstMediaUrl === "" ? null : $firstMediaUrl;
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCartRequest;
 use App\Http\Requests\BulkUpdateCartRequest;
 use App\Http\Requests\BulkDeleteCartRequest;
 use App\Models\Cart;
+use App\Models\Courier;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,7 +22,8 @@ class CartController extends Controller
         $this->pass("index cart");
         
         $data = Cart::query()
-            //->with(['media'])
+            ->with(['user', 'product'])
+            ->whereUserId($this->user->id)
             ->when($request->name, function($q, $v){
                 $q->where('name', $v);
             });
@@ -29,6 +31,7 @@ class CartController extends Controller
         return Inertia::render('cart/index', [
             'carts' => $data->get(),
             'query' => $request->input(),
+            'couriers' => Courier::all(),
             'permissions' => [
                 'canAdd' => $this->user->can("create cart"),
                 'canShow' => $this->user->can("show cart"),
@@ -46,6 +49,7 @@ class CartController extends Controller
         $this->pass("create cart");
 
         $data = $request->validated();
+        $data['user_id'] = $this->user->id;
         Cart::create($data);
     }
 

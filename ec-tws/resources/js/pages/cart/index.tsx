@@ -7,26 +7,38 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AppLayout from '@/layouts/app-layout';
 import { SharedData } from '@/types';
 import { Cart } from '@/types/cart';
-import { Link, usePage } from '@inertiajs/react';
-import { Edit, Filter, Folder, FolderArchive, Image, Plus, Trash2 } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { Edit, Filter, Folder, Minus, Plus, Trash2 } from 'lucide-react';
 import { FC, useState } from 'react';
+import CartBulkDeleteDialog from './components/cart-bulk-delete-dialog';
+import CartBulkEditSheet from './components/cart-bulk-edit-sheet';
 import CartDeleteDialog from './components/cart-delete-dialog';
 import CartFilterSheet from './components/cart-filter-sheet';
 import CartFormSheet from './components/cart-form-sheet';
-import CartBulkEditSheet from './components/cart-bulk-edit-sheet';
-import CartBulkDeleteDialog from './components/cart-bulk-delete-dialog';
-import CartUploadMediaSheet from './components/cart-upload-sheet';
+import { formatRupiah } from '@/lib/utils';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Courier } from '@/types/courier';
 
 type Props = {
   carts: Cart[];
+  couriers: Courier[];
   query: { [key: string]: string };
 };
 
-const CartList: FC<Props> = ({ carts, query }) => {
+const CartList: FC<Props> = ({ carts, query, couriers }) => {
   const [ids, setIds] = useState<number[]>([]);
   const [cari, setCari] = useState('');
+  const [kurir, setKurir] = useState('');
 
   const { permissions } = usePage<SharedData>().props;
+
+  const updateQuantity = (cartId: number, newQuantity: number) => {
+    if (newQuantity < 1) return;
+
+    router.put(route('cart.update', cartId), { quantity: newQuantity }, { preserveScroll: true });
+  };
+
 
   return (
     <AppLayout
@@ -42,7 +54,6 @@ const CartList: FC<Props> = ({ carts, query }) => {
               </Button>
             </CartFormSheet>
           )}
-          
         </>
       }
     >
@@ -94,7 +105,10 @@ const CartList: FC<Props> = ({ carts, query }) => {
                 </Label>
               </Button>
             </TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead>Product</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Quantity</TableHead>
+            <TableHead>Total Price</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -119,7 +133,22 @@ const CartList: FC<Props> = ({ carts, query }) => {
                     </Label>
                   </Button>
                 </TableCell>
-                <TableCell>{ cart.name }</TableCell>
+                <TableCell>{cart.product?.name}</TableCell>
+                <TableCell>{formatRupiah(cart.product.price)}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Button size="icon" variant="outline" onClick={() => updateQuantity(cart.id, cart.quantity - 1)} disabled={cart.quantity <= 1}>
+                      <Minus className="h-4 w-4" />
+                    </Button>
+
+                    <span className="w-8 text-center">{cart.quantity}</span>
+
+                    <Button size="icon" variant="outline" onClick={() => updateQuantity(cart.id, cart.quantity + 1)}>
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+                <TableCell>{formatRupiah(cart.product.price * cart.quantity)}</TableCell>
                 <TableCell>
                   {permissions?.canShow && (
                     <Button variant={'ghost'} size={'icon'}>
@@ -130,7 +159,6 @@ const CartList: FC<Props> = ({ carts, query }) => {
                   )}
                   {permissions?.canUpdate && (
                     <>
-                      
                       <CartFormSheet purpose="edit" cart={cart}>
                         <Button variant={'ghost'} size={'icon'}>
                           <Edit />
@@ -150,6 +178,38 @@ const CartList: FC<Props> = ({ carts, query }) => {
             ))}
         </TableBody>
       </Table>
+
+      {ids.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>CheckOut</CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">
+              Total Price:{' '}
+              {formatRupiah(
+                carts.filter((cart) => ids.includes(cart.id)).reduce((total, cart) => total + Number(cart.product.price) * cart.quantity, 0),
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm">Pilih Kurir:</p>
+            <Select onValueChange={setKurir}>
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="Pilih kurir pengiriman" />
+              </SelectTrigger>
+              <SelectContent>
+                {couriers.map((c) => (
+                  <SelectItem key={c.id} value={c.id.toString()}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardContent>
+          <CardFooter>
+            <Button>Checkout</Button>
+          </CardFooter>
+        </Card>
+      )}
     </AppLayout>
   );
 };

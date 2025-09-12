@@ -14,11 +14,11 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-type props = {
+type Props = {
   products: Product[];
 };
 
-const Dashboard: FC<props> =({products}) => {
+const Dashboard: FC<Props> = ({ products }) => {
   const {
     auth: { roles },
   } = usePage<SharedData>().props;
@@ -30,12 +30,13 @@ const Dashboard: FC<props> =({products}) => {
         <DateTimeWidget />
       </div>
 
-      <div className="grid">
-        {products.map(p) => (
+      <div className="grid grid-cols-4 gap-5">
+        {products.map((p) => (
           <ProductItemCard key={p.id} product={p} />
-        
         ))}
       </div>
     </AppLayout>
   );
-}
+};
+
+export default Dashboard;

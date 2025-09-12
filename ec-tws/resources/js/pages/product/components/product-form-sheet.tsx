@@ -1,19 +1,20 @@
 import FormControl from '@/components/form-control';
+import MoneyInput from '@/components/money-input';
 import SubmitButton from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SelectTrigger, SelectValue, SelectItem, Select, SelectContent } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { em, capitalizeWords } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
+import { capitalizeWords, em } from '@/lib/utils';
 import { FormPurpose } from '@/types';
+import { Category } from '@/types/category';
 import { Product } from '@/types/product';
-import { Textarea } from '@headlessui/react';
 import { useForm, usePage } from '@inertiajs/react';
 import { X } from 'lucide-react';
 import { FC, PropsWithChildren, useState } from 'react';
 import { toast } from 'sonner';
-import { Category } from '@/types/category';
 
 type Props = PropsWithChildren & {
   product?: Product;
@@ -76,12 +77,12 @@ const ProductFormSheet: FC<Props> = ({ children, product, purpose }) => {
               <Input type="text" placeholder="Name" value={data.name} onChange={(e) => setData('name', e.target.value)} />
             </FormControl>
             <FormControl label="Price">
-              <Input type="text" placeholder="Price" value={data.price} onChange={(e) => setData('price', e.target.value)} />
+              <MoneyInput placeholder="Harga" value={Number(data.price)} onValueChange={(e) => setData('price', Number(e))} />
             </FormControl>
             <FormControl label="Description">
-              <Textarea placeholder="Description" value={data.description} onChange={(e) => setData('description', e.target.value)} />
+              <Textarea placeholder="Deskripsi" value={data.description} onChange={(e) => setData('description', e.target.value)} />
             </FormControl>
-            <FormControl label="Stok Barang">
+            <FormControl label="Stock Barang">
               <Input type="number" placeholder="Stock" value={data.stock} onChange={(e) => setData('stock', e.target.value)} />
             </FormControl>
             <FormControl label="Kategori">
@@ -97,7 +98,7 @@ const ProductFormSheet: FC<Props> = ({ children, product, purpose }) => {
                   ))}
                 </SelectContent>
               </Select>
-          </FormControl>
+            </FormControl>
           </form>
         </ScrollArea>
         <SheetFooter>

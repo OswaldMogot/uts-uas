@@ -15,7 +15,7 @@ class StoreCartRequest extends FormRequest
     {
         return [
             'product_id' => 'nullable',
-            'user_id' => 'nullable',
+            'user_id' => 'nullable|exists:users,id',
             'quantity' => 'nullable',
         ];
     }
