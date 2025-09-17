@@ -157,6 +157,7 @@ class ProductController extends Controller
         $this->pass("update product");
 
         $data = $request->validated();
+        // dd( $data);
         $product->addMedia($data['file'])->toMediaCollection();
     }
 }
