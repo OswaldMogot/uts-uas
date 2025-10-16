@@ -49,8 +49,25 @@ class CartController extends Controller
         $this->pass("create cart");
 
         $data = $request->validated();
-        $data['user_id'] = $this->user->id;
-        Cart::create($data);
+        $userId = $request->user()->id;
+        $productId = $data['product_id'];
+        $newQty = $data['quantity'];
+
+        // Check if product already exists in user's cart
+        $existingCartItem = Cart::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($existingCartItem) {
+            // Update existing cart item by adding the new quantity
+            $existingCartItem->update([
+                'quantity' => $existingCartItem->quantity + $newQty,
+            ]);
+        } else {
+            // Create new cart item
+            $data['user_id'] = $userId;
+            Cart::create($data);
+        }
     }
 
     /**
