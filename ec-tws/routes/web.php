@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -58,6 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('transaction/bulk', [TransactionController::class, 'bulkDelete'])->name('transaction.bulk.destroy');
     Route::post('transaction/{transaction}/upload-media', [TransactionController::class, 'uploadMedia'])->name('transaction.upload-media');
     Route::apiResource('transaction', TransactionController::class);
+    Route::resource('order', OrderController::class);
     Route::put('review/bulk', [ReviewController::class, 'bulkUpdate'])->name('review.bulk.update');
     Route::delete('review/bulk', [ReviewController::class, 'bulkDelete'])->name('review.bulk.destroy');
     Route::apiResource('review', ReviewController::class);

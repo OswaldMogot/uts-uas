@@ -15,7 +15,8 @@ import ReviewFilterSheet from './components/review-filter-sheet';
 import ReviewFormSheet from './components/review-form-sheet';
 import ReviewBulkEditSheet from './components/review-bulk-edit-sheet';
 import ReviewBulkDeleteDialog from './components/review-bulk-delete-dialog';
-import ReviewUploadMediaSheet from './components/review-upload-sheet';
+import { cn } from '@/lib/utils';
+// import ReviewUploadMediaSheet from './components/review-upload-sheet';
 
 type Props = {
   reviews: Review[];

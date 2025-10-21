@@ -95,7 +95,8 @@ class TransactionController extends Controller
         }
 
         return Inertia::render('transaction/show', [
-            'transaction' => $transaction,
+            'transaction' => $transaction->load(['media', 'user', 'courier']),
+            'statusLists' => Transaction::$statusLists,
             'permissions' => [
                 'canUpdate' => $this->user->can("update transaction"),
                 'canDelete' => $this->user->can("delete transaction"),

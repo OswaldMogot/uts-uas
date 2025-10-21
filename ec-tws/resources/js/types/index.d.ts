@@ -3,7 +3,9 @@ import type { Config } from 'ziggy-js';
 
 export interface Auth {
   user: User;
+  carts: cart[];
   roles: string[];
+  
 }
 
 export interface BreadcrumbItem {
@@ -40,6 +42,8 @@ export interface User {
   email: string;
   avatar?: string;
   roles?: string[];
+  address?: string;
+  phone?: string;
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;

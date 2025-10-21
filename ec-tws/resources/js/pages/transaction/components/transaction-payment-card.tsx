@@ -5,6 +5,7 @@ import { Transaction } from '@/types/transaction';
 import { FC } from 'react';
 import TransactionPaidStatusBadge from './transaction-paid-status-badge';
 
+
 type Props = {
   transaction: Transaction;
 };

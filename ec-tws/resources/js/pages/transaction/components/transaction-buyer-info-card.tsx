@@ -29,7 +29,7 @@ const TransactionBuyerInfoCard: FC<Props> = ({ user }) => {
       </CardHeader>
       <CardHeader>
         <CardDescription>Nomor telepon</CardDescription>
-        {/* <CardTitle>{user.phone ?? '-'}</CardTitle> */}
+        <CardTitle>{user.phone ?? '-'}</CardTitle>
       </CardHeader>
     </Card>
   );

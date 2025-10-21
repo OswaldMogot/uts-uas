@@ -8,12 +8,7 @@ export type Cart = {
   product: Product;
   user_id: User['id'];
   user: User;
-  quantity: string;
-  product_id: Product['id'];
-  product: Product;
-  user_id: User['id'];
-  user: User;
-  quantity: string;
+  quantity: number;
   created_at: string;
   updated_at: string;
 };

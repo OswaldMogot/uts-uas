@@ -1,6 +1,7 @@
 import { User } from "./user";
 import { Courier } from "./courier";
 import { Media } from ".";
+import { review } from "./review";
 
 export type TransactionItem = {
   name: string;
@@ -23,7 +24,7 @@ export type Transaction = {
   total_price: number;
   paid: boolean;
   media: Media[];
-  review:boolean;
+  review: review;
   created_at: string;
   updated_at: string;
 };

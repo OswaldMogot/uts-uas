@@ -24,7 +24,7 @@ class UserController extends Controller
 
         return Inertia::render('user/index', [
             'users' => $data->get()->map(function ($user) {
-                return $user->only(['id', 'name', 'email']) + [
+                return $user->only(['id', 'name', 'email', 'address', 'phone']) + [
                     'roles' => $user->getRoleNames(),
                 ];
             }),

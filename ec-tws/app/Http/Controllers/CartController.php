@@ -22,7 +22,7 @@ class CartController extends Controller
         $this->pass("index cart");
         
         $data = Cart::query()
-            ->with(['user', 'product'])
+            ->with(['user', 'product.category'])
             ->whereUserId($this->user->id)
             ->when($request->name, function($q, $v){
                 $q->where('name', $v);

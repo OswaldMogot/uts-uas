@@ -57,7 +57,7 @@ const TransactionStatusStep: FC<Props> = ({ transaction }) => {
     },
   ];
 
-  return (
+ return (
     <Card className="break-inside-avoid">
       <CardHeader>
         <CardTitle>Cek status pengiriman</CardTitle>
@@ -82,7 +82,7 @@ const TransactionStatusStep: FC<Props> = ({ transaction }) => {
                 <Button
                   size="lg"
                   variant="ghost"
-                  className={w-full justify-start ${step.active ? 'bg-success/10 text-success' : 'text-muted-foreground'}}
+                  className={`w-full justify-start ${step.active ? 'bg-success/10 text-success' : 'text-muted-foreground'}`}
                 >
                   {ButtonContent}
                 </Button>
@@ -95,7 +95,7 @@ const TransactionStatusStep: FC<Props> = ({ transaction }) => {
               key={idx}
               size="lg"
               variant="ghost"
-              className={w-full justify-start ${step.active ? 'bg-success/10 text-success' : 'text-muted-foreground'}}
+              className={`w-full justify-start ${step.active ? 'bg-success/10 text-success' : 'text-muted-foreground'}`}
             >
               {ButtonContent}
             </Button>
@@ -106,4 +106,4 @@ const TransactionStatusStep: FC<Props> = ({ transaction }) => {
   );
 };
 
-export default TransactionStatusStep;;
+export default TransactionStatusStep;
